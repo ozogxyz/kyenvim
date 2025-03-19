@@ -1,20 +1,23 @@
--- add ~/.config/nvim to path to prevent stupid nested folders of neovim
+-- Add ~/.config/nvim to path to prevent unnecessarily nested directories of neovim
 package.path = package.path .. ';' .. vim.fn.stdpath('config') .. '/?.lua'
-
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
-vim.g.netrw_banner = 0
 
 require 'options'
 require 'keymaps'
 require 'autocommands'
 
--- Enable LSP servers defined in lsp/*.lua
+-- Minimal LSP setup (Neovim 0.11+)
+vim.lsp.config('lua_lsp', {
+	cmd = { "lua-language-server" },
+	root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
+	filetypes = { "lua" },
+})
+
+
+vim.lsp.config('go_lsp', {
+	cmd = {'gopls'},
+	filetypes = {'go'},
+	root_markers = {'go.mod'},
+})
+
 vim.lsp.enable('lua_lsp')
 vim.lsp.enable('go_lsp')
